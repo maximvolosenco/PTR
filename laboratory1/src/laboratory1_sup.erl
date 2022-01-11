@@ -5,53 +5,30 @@
 
 -module(laboratory1_sup).
 
--behaviour(gen_server).
+-behaviour(supervisor).
 
--export([start_link/0, init/1, handle_cast/2, handle_test/1 ]).
+-export([start_link/0]).
+
+-export([init/1]).
+
+-define(SERVER, ?MODULE).
 
 start_link() ->
-    gen_server:start_link(?MODULE, [], []).
+    supervisor:start_link({local, ?SERVER}, ?MODULE, []).
 
 init([]) ->
-    {ok, {}}.
+    SupFlags = #{strategy => one_for_all,
+                 intensity => 0,
+                 period => 1},
+                 
+    WorkerSupervisor = #{
+        id => worker_supervisor,
+        start => {worker_supervisor, start_link, []},
+        restart => permanent,
+        type => supervisor,
+        modules => [worker_supervisor]
+        },
 
-handle_cast({send_message, EventMessageBinary}, State) ->
-    
-    io:format("The value is: ~p.", [EventMessageBinary]);
+    ChildSpecs = [WorkerSupervisor],
 
-handle_cast({_, EventMessageBinary}, _) ->
-    
-    io:format("The value is: ~p.", [EventMessageBinary]).
-
-handle_test(Input) -> 
-    io:format("The value is: ~p .", [Input]).
-% handle_call() ->
-
-% -behaviour(supervisor).
-
-% -export([start_link/0]).
-
-% -export([init/1]).
-
-% -define(SERVER, ?MODULE).
-
-% start_link() ->
-%     supervisor:start_link({local, ?SERVER}, ?MODULE, []).
-
-% %% sup_flags() = #{strategy => strategy(),         % optional
-% %%                 intensity => non_neg_integer(), % optional
-% %%                 period => pos_integer()}        % optional
-% %% child_spec() = #{id => child_id(),       % mandatory
-% %%                  start => mfargs(),      % mandatory
-% %%                  restart => restart(),   % optional
-% %%                  shutdown => shutdown(), % optional
-% %%                  type => worker(),       % optional
-% %%                  modules => modules()}   % optional
-% init([]) ->
-%     SupFlags = #{strategy => one_for_all,
-%                  intensity => 0,
-%                  period => 1},
-%     ChildSpecs = [],
-%     {ok, {SupFlags, ChildSpecs}}.
-
-% %% internal functions
+    {ok, {SupFlags, ChildSpecs}}.
