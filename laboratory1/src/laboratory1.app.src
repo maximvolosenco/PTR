@@ -5,7 +5,8 @@
   {mod, {laboratory1_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    shotgun
    ]},
   {env,[]},
   {modules, []},

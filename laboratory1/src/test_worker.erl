@@ -10,19 +10,19 @@ start_link() ->
 init([]) ->
     {ok, {}}.
 
-handle_cast({send_message, EventMessageBinary}, State) ->
+% handle_cast({send_message, EventMessageBinary}, State) ->
     
-    io:format("The value is: ~p.", [EventMessageBinary]),
-    {noreply, State};
+%     io:format("The value is: ~p.", [EventMessageBinary]),
+%     {noreply, State};
 
-handle_cast({_, EventMessageBinary}, _) ->
+% handle_cast({_, EventMessageBinary}, _) ->
     
-    io:format("The value is: ~p.", [EventMessageBinary]),
-    {noreply, []};
+%     io:format("The value is: ~p.", [EventMessageBinary]),
+%     {noreply, []};
 
-handle_cast(String, {}) -> 
-    io:format("dasd ~p", [String]),
-    {noreply, []}.
+handle_cast(String, _) -> 
+    io:format("dasd ~p~n", [String]),
+    {noreply, {}}.
     
 handle_call({_, _}, State, _)->
     {noreply, State}.

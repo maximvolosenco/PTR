@@ -20,7 +20,9 @@ init([]) ->
     SupFlags = #{strategy => one_for_all,
                  intensity => 0,
                  period => 1},
-                 
+
+    Stream1 = "/tweets/1",  
+         
     WorkerSupervisor = #{
         id => worker_supervisor,
         start => {worker_supervisor, start_link, []},
@@ -28,7 +30,21 @@ init([]) ->
         type => supervisor,
         modules => [worker_supervisor]
         },
+    Router = #{
+        id => router,
+        start => {router, start_link, []},
+        restart => permanent,
+        type => worker,
+        modules => [router]
+        },
+    Reader = #{
+        id => reader,
+        start => {reader, start, [Stream1]},
+        restart => permanent,
+        type => worker,
+        modules => [reader]
+        },
 
-    ChildSpecs = [WorkerSupervisor],
+    ChildSpecs = [WorkerSupervisor, Router, Reader],
 
     {ok, {SupFlags, ChildSpecs}}.

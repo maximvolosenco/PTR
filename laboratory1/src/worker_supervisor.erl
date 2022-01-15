@@ -18,8 +18,8 @@ start_link() ->
 
 init([]) ->
     SupFlags = #{strategy => simple_one_for_one,
-                 intensity => 0,
-                 period => 1},
+                 intensity => 10,
+                 period => 10},
                  
     TestWorker1 = #{
         id => test_worker,
