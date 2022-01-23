@@ -44,7 +44,21 @@ init([]) ->
         type => worker,
         modules => [reader]
         },
+    Batcher = #{
+        id => batcher,
+        start => {batcher, start_link, []},
+        restart => permanent,
+        type => worker,
+        modules => [batcher]
+        },
+    Database =#{
+        id => database,
+        start => {database, start_link, []},
+        restart => permanent,
+        type => worker,
+        modules => [database]
+        },
 
-    ChildSpecs = [WorkerSupervisor, Router, Reader],
+    ChildSpecs = [Database, Batcher, WorkerSupervisor, Router],
 
     {ok, {SupFlags, ChildSpecs}}.

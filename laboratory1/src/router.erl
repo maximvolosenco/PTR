@@ -14,7 +14,6 @@ handle_cast(Request, State) ->
     ChildrenList = supervisor:which_children(worker_supervisor),
     { _, Child, _, _ } = lists:nth((State rem length(ChildrenList)) + 1, ChildrenList), 
     gen_server:cast(Child, Request),
-    io:format("[Router] State: ~p~n", [State]),
     NewState = State + 1,
     {noreply, NewState}.
 

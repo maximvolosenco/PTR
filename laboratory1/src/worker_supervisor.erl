@@ -21,14 +21,14 @@ init([]) ->
                  intensity => 10,
                  period => 10},
                  
-    TestWorker1 = #{
-        id => test_worker,
-        start => {test_worker, start_link, []},
+    PrintWorker1 = #{
+        id => print_worker,
+        start => {print_worker, start_link, []},
         restart => permanent,
         type => worker,
-        modules => [test_worker]
+        modules => [print_worker]
         },
 
-    ChildSpecs = [TestWorker1],
+    ChildSpecs = [PrintWorker1],
 
     {ok, {SupFlags, ChildSpecs}}.
