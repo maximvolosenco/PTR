@@ -12,8 +12,8 @@ init([]) ->
 
 handle_cast(String, _) -> 
     TweetLength = string:length(String),
-    % batcher:send_tweet_length(TweetLength),
-    io:format("Len: ~p~n", [TweetLength]),
+    batcher:send_tweet_length(TweetLength),
+    % io:format("Len: ~p~n", [TweetLength]),
     {noreply, {}}.
     
 handle_call({_, _}, State, _)->

@@ -8,7 +8,7 @@ start_link() ->
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []).
 
 init([]) ->
-    erlang:start_timer(3000, batcher, secondsexpired),
+    erlang:start_timer(500, batcher, secondsexpired),
     {ok, {[], 0}}.
 
 send_tweet_length(TweetLength) ->
@@ -17,7 +17,7 @@ send_tweet_length(TweetLength) ->
 handle_cast({TweetLength}, {TweetLengths, Count}) -> 
     NewCount = Count + 1,
     NewTweetLengths = [TweetLength | TweetLengths],
-    if NewCount > 3 ->
+    if NewCount > 100 ->
         Index = generate_random_number(),
         database:store_to_db({Index, NewTweetLengths}),
         NewState = {[], 0};
@@ -28,7 +28,7 @@ handle_cast({TweetLength}, {TweetLengths, Count}) ->
 
 handle_info({_, _, secondsexpired}, NewTweetLengths) ->
     database:store_to_db(NewTweetLengths),
-    erlang:start_timer(3000, self(), secondsexpired),
+    erlang:start_timer(500, self(), secondsexpired),
     {noreply, {[], 0}}.
 
 generate_random_number() -> 

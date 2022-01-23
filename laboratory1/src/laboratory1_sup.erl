@@ -59,6 +59,6 @@ init([]) ->
         modules => [database]
         },
 
-    ChildSpecs = [Database, Batcher, WorkerSupervisor, Router],
+    ChildSpecs = [Database, Batcher, Reader, WorkerSupervisor, Router],
 
     {ok, {SupFlags, ChildSpecs}}.
